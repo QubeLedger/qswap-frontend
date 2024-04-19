@@ -183,12 +183,24 @@ const Token = styled.div`
 `
 
 const TokenContrainer = styled.div`
+    height: 50px;
     width: 85%;
     display: flex;
     align-items: center;
     justify-content: space-between;
     margin-top: 10px;
     cursor: pointer;
+`
+
+const TokenBlock = styled.div`
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    overflow-y: auto;
+    scrollbar-width: none;
 `
 
 
@@ -274,7 +286,9 @@ export const SwapPageModalTo = () => {
                             <SearchToken placeholder='Search'></SearchToken>
                         </SearchDiv>
                     </SearchBorder>
-                    <>{tokens}</>
+                    <TokenBlock>
+                        {tokens}
+                    </TokenBlock>
                 </StyledDialogContent>
             </StyledDialogOvelay>
         </ModalBlock>

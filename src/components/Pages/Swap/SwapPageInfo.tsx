@@ -14,8 +14,15 @@ const Cotainer = styled.div`
 
 const Info = styled.a`
     color: #BABABA;
-    font-weight: 400;
+    font-weight: 500;
     font-size: 15px;
+`
+
+const InfoBlock = styled.div`
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 `
 
 
@@ -35,9 +42,15 @@ export const SwapPageInfo = () => {
 
     return(
         <Cotainer>
-            <Info>Price: 1 {amountIn.base} = {toFixed(CalculatePriceByTick(tick), 4)} {amountOut.base}</Info>
+            <InfoBlock>
+                <Info>Price: </Info>
+                <Info>1 {amountIn.base} = {toFixed(CalculatePriceByTick(tick), 4)} {amountOut.base}</Info>
+            </InfoBlock>
+            <InfoBlock>
+                <Info>Slippage: </Info>
+                <Info>0.2%</Info>
+            </InfoBlock>
             {/*<Info>Route: {amountIn.base} {"->"} {amountOut.base}</Info>*/}
-            <Info>Slippage: 0.2%</Info>
         </Cotainer>
     )
 }
