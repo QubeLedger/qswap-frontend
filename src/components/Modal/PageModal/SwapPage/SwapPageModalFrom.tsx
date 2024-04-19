@@ -47,7 +47,7 @@ const CloseButton = styled.button <{ TextColor: string }>`
     outline: none;
 `
 
-const OpenButton = styled.button <{TextColor: string, modalHover: string, OpenButtonBg: string}>`
+const OpenButton = styled.button <{ TextColor: string, modalHover: string, OpenButtonBg: string }>`
     background: ${props => props.OpenButtonBg};
     border:none;
     outline: none;
@@ -119,15 +119,31 @@ const SearchToken = styled.input`
 `
 
 const TokenLogo = styled.img`
-    width: 30px;
-    height: 30px;  
+    width: 45px;
+    height: 45px;  
     border-radius: 50px;
 `
 
 const TokenName = styled.a <{ TextColor: string }>`
-    font-size: 22px;
+    font-size: 16px;
     color: ${props => props.TextColor};
-    font-weight: 500;
+    font-weight: 600;
+    margin-left: 10px;
+    @media (max-width: 500px) {
+        margin-top: 2px;   
+    }
+`
+
+const TokenNameBlock = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+`
+
+const TokenNetwork = styled.a`
+    font-size: 13px;
+    color: #888;
+    font-weight: 600;
     margin-left: 10px;
     @media (max-width: 500px) {
         margin-top: 2px;   
@@ -146,9 +162,10 @@ const ModalText = styled.h4 <{ TextColor: string }>`
     color: ${props => props.TextColor};
 `
 
-const AmountText = styled.a <{ TextColor: string }>`
+const AmountText = styled.h2 <{ TextColor: string }>`
     font-size: 20px;
     font-weight: 500;
+    margin: 0;
     color: ${props => props.TextColor};
 `
 
@@ -159,13 +176,13 @@ const Token = styled.div`
 `
 
 const TokenContrainer = styled.div`
-    height: 50px;
-    width: 85%;
+    height: 60px;
+    width: 100%;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-top: 10px;
     cursor: pointer;
+    border-radius: 20px;
 `
 
 const TokenBlock = styled.div`
@@ -174,9 +191,19 @@ const TokenBlock = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 15px;
     overflow-y: auto;
     scrollbar-width: none;
+    margin-top: 10px;
+`
+
+const HoverBlock = styled.div <{ ModalHoverColor: string }>`
+    width: 80%;
+    padding: 0px 10px;
+    border-radius: 20px;
+    &:hover{
+        background: ${props => props.ModalHoverColor};
+        transition: background .2s ease-in-out;
+    }
 `
 
 
@@ -214,26 +241,31 @@ export const SwapPageModalFrom = () => {
     const open = () => { setShowModalSwapFrom({ b: true }) };
     const close = () => { setShowModalSwapFrom({ b: false }) };
 
-    let tokens = TOKEN_INFO.map((token) => 
-        <TokenContrainer onClick={() => {
-            setAmountIn({
-                amt: amountIn.amt,
-                logo: token.Logo,
-                base: token.Base,
-                denom: token.Denom,
-            })
-            close()
-        }}>
-            <Token>
-                <TokenLogo src={token.Logo} />
-                <TokenName style={{fontSize: "20px"}} TextColor={theme.TextColor}>{token.Base}</TokenName>
-            </Token>
-            <AmountText TextColor={theme.TextColor}>{
-                tokenBalances.find((tokenBalance) => tokenBalance.Display == token.Base)?.Amount === undefined ? 
-                0 : 
-                toFixed(Number(tokenBalances.find((tokenBalance) => tokenBalance.Display == token.Base)?.Amount), 4)
-            }</AmountText>
-        </TokenContrainer>
+    let tokens = TOKEN_INFO.map((token) =>
+        <HoverBlock ModalHoverColor={theme.ModalHoverColor}>
+            <TokenContrainer onClick={() => {
+                setAmountIn({
+                    amt: amountIn.amt,
+                    logo: token.Logo,
+                    base: token.Base,
+                    denom: token.Denom,
+                })
+                close()
+            }}>
+                <Token>
+                    <TokenLogo src={token.Logo} />
+                    <TokenNameBlock>
+                        <TokenName TextColor={theme.TextColor}>{token.Base}</TokenName>
+                        <TokenNetwork>{token.Base}</TokenNetwork>
+                    </TokenNameBlock>
+                </Token>
+                <AmountText TextColor={theme.TextColor}>{
+                    tokenBalances.find((tokenBalance) => tokenBalance.Display == token.Base)?.Amount === undefined ?
+                        0 :
+                        toFixed(Number(tokenBalances.find((tokenBalance) => tokenBalance.Display == token.Base)?.Amount), 4)
+                }</AmountText>
+            </TokenContrainer>
+        </HoverBlock>
     )
 
     return (
@@ -262,7 +294,7 @@ export const SwapPageModalFrom = () => {
                             <SearchToken placeholder='Search'></SearchToken>
                         </SearchDiv>
                     </SearchBorder>
-                    <TokenBlock>
+                    <TokenBlock >
                         {tokens}
                         {tokens}
                     </TokenBlock>
