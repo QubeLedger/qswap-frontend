@@ -2,7 +2,9 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { CalculatePriceByTick, GetTickByTokenATokenB } from "../../../web3/tick";
 import { useAmountIn, useAmountOut } from "../../../hooks/useAmountInStore";
-import { toFixed } from "../../../constants/utils";
+import { GetBaseByDenom, toFixed } from "../../../constants/utils";
+import { GetRouteByTokenAToTokenB } from "../../../web3/routes";
+import { usePoolMetadata, useRoutes } from "../../../hooks/usePoolMetadata";
 
 const Cotainer = styled.div`
     width: 100%;
@@ -30,6 +32,8 @@ export const SwapPageInfo = () => {
     const [amountIn, setAmountIn] = useAmountIn()
     const [amountOut, setAmountOut] = useAmountOut()
     const [tick, setTick] = useState(0)
+    const [pools, setPools] = usePoolMetadata();
+    const [routes, setRoutes] = useRoutes()
 
     useEffect(() => {
         async function main() {
@@ -40,16 +44,31 @@ export const SwapPageInfo = () => {
         main()
     }, [amountIn, amountOut])
 
+    let route_string = "No route"
+    for (let index = 0; index < routes.length; index++) {
+        if(route_string == "No route") {
+            route_string = ""
+            route_string += GetBaseByDenom(routes[index])
+        } else {
+            route_string += `-> ${GetBaseByDenom(routes[index])}`
+        }
+        
+    }
+
     return(
         <Cotainer>
             <InfoBlock>
-                <Info>Price: </Info>
-                <Info>1 {amountIn.base} = {toFixed(CalculatePriceByTick(tick), 4)} {amountOut.base}</Info>
+                <Info>Route: </Info>
+                <Info>{route_string}</Info>
             </InfoBlock>
             <InfoBlock>
                 <Info>Slippage: </Info>
                 <Info>0.2%</Info>
             </InfoBlock>
+            {/*<InfoBlock>
+                <Info>Price: </Info>
+                <Info>1 {amountIn.base} = {toFixed(CalculatePriceByTick(tick), 4)} {amountOut.base}</Info>
+            </InfoBlock>*/}
             {/*<Info>Route: {amountIn.base} {"->"} {amountOut.base}</Info>*/}
         </Cotainer>
     )

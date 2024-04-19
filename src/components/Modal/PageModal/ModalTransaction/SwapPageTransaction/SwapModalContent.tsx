@@ -1,9 +1,18 @@
 import styled from "styled-components";
-import USDC from '../../../../../assets/svg/USDC Logo.webp'
-import Atom from '../../../../../assets/svg/AtomLogo.png'
 import { useToggleTheme } from "../../../../../hooks/useToggleTheme";
 import { SwapModalInfo } from "./SwapModalInfo";
-import { SwapPageConfirm } from "../../../../Buttons/PageButtons/SwapPage/SwapPageConfirm";
+import { AmountIn, AmountWithLogo, useAmountIn, useAmountOut } from "../../../../../hooks/useAmountInStore";
+import { useEffect, useState } from "react";
+import { GetOutAmountByRouteAndInput } from "../../../../../web3/routes";
+import { useRoutes } from "../../../../../hooks/usePoolMetadata";
+import { toFixed } from "../../../../../constants/utils";
+import { useShowTransactionModalSwap } from "../../../../../hooks/useShowModal";
+import { LoadingModalComponent } from "../../../helpers/LoadingModalComponent";
+import { SucceedModalComponent } from "../../../helpers/SucceedModalComponent";
+import { FailedModalComponent } from "../../../helpers/FailedModalComponent";
+import { Wallet } from "../../../../../hooks/useWallet";
+import { Client, useClient } from "../../../../../hooks/useClient";
+import { MultihopSwap } from "../../../../../web3/swap";
 
 const Container = styled.div`
     width: 100%;
@@ -51,6 +60,7 @@ const LogoBlock = styled.div`
 const TokenLogo = styled.img`
     width: 40px;
     height: 40px;
+    border-radius: 50px;
 `
 
 const TokenName = styled.a <{ TextColor: string }>`
@@ -80,54 +90,174 @@ const GradientBlock = styled.div`
     margin-top: 10px;
 `
 
+const Button = styled.button`
+    width: 90%;
+    height: 50px;
+    background: linear-gradient(to right, #74BCFD, #339BFE);
+    border: none;
+    border-radius: 20px;
+    margin-top: 30px;
+    color: #fff;
+    font-size: 22px;
+    font-weight: 600;
+`
 
-export const SwapModalContent = () => {
+const CloseDiv = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    font-family: 'Metropolis', sans-serif;
+    color: white;
+    margin-top: 20px;
+`
 
+const ContentDiv = styled.div`
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+`
+
+const HeaderText = styled.a <{ TextColor: string }>`
+    font-size: 14px;
+    color: ${props => props.TextColor};
+    white-space: nowrap;
+`
+
+const HeaderBlock = styled.div`
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    margin-left: 17px;
+`
+
+const CloseButton = styled.button <{ TextColor: string }>`
+    width: 25px;
+    height: 25px;
+    font-size: 30px;
+    margin-right: 20px;
+    margin-top: -1px;
+    background-color: transparent;
+    border: none;
+    color: ${props => props.TextColor};
+    margin-left: auto;
+    outline: none;
+`
+
+
+export function SwapModal(
+    TextColor: string,
+    wallet: Wallet,
+    onCLose: () => void,
+) {
     const [theme, setTheme] = useToggleTheme();
+    const [amountIn, setAmountIn] = useAmountIn()
+    const [amountOut, setAmountOut] = useAmountOut()
+    const [out, setOut] = useState(0);
+    const [routes, setRoutes] = useRoutes();
+    const [ShowTransactionModalSwap, setShowTransactionModalSwap] = useShowTransactionModalSwap();
+    const [tx, setTx] = useState('')
+    const [client, setClient] = useClient();
 
-    const Content =
+    useEffect(() => {
+        async function main() {
+            let temp_out = await GetOutAmountByRouteAndInput(routes, Number(amountIn.amt));
+            setOut(temp_out)
+        }
+        main()
+    }, [amountIn])
+
+    const ContentModalNotPending =
         <>
-            <Block>
-                <TextBlock>
-                    <Text TextColor={theme.TextColor}>You give</Text>
-                </TextBlock>
-                <Field>
-                    <LogoBlock>
-                        <TokenLogo src={Atom}></TokenLogo>
-                        <TokenName TextColor={theme.TextColor}>ATOM</TokenName>
-                    </LogoBlock>
-                    <AmountBlock>
-                        <AmountToken TextColor={theme.TextColor}>35</AmountToken>
-                    </AmountBlock>
-                </Field>
-                <TextBlock>
-                    <Text TextColor={theme.TextColor}>You'll get</Text>
-                </TextBlock>
-                <Field>
-                    <LogoBlock>
-                        <TokenLogo src={USDC}></TokenLogo>
-                        <TokenName TextColor={theme.TextColor}>USDC</TokenName>
-                    </LogoBlock>
-                    <AmountBlock>
-                        <AmountToken TextColor={theme.TextColor}>1100</AmountToken>
-                    </AmountBlock>
-                </Field>
-                <GradientBlock />
-                <SwapModalInfo />
-                <SwapPageConfirm />
-            </Block>
+            <ContentDiv>
+                <Container>
+                    <Block>
+                        <TextBlock>
+                            <Text TextColor={theme.TextColor}>You give</Text>
+                        </TextBlock>
+                        <Field>
+                            <LogoBlock>
+                                <TokenLogo src={amountIn.logo}></TokenLogo>
+                                <TokenName TextColor={theme.TextColor}>{amountIn.base}</TokenName>
+                            </LogoBlock>
+                            <AmountBlock>
+                                <AmountToken TextColor={theme.TextColor}>{amountIn.amt}</AmountToken>
+                            </AmountBlock>
+                        </Field>
+                        <TextBlock>
+                            <Text TextColor={theme.TextColor}>You'll get</Text>
+                        </TextBlock>
+                        <Field>
+                            <LogoBlock>
+                                <TokenLogo src={amountOut.logo}></TokenLogo>
+                                <TokenName TextColor={theme.TextColor}>{amountOut.base}</TokenName>
+                            </LogoBlock>
+                            <AmountBlock>
+                                <AmountToken TextColor={theme.TextColor}>{toFixed(out, 4)}</AmountToken>
+                            </AmountBlock>
+                        </Field>
+                        <GradientBlock />
+                        <SwapModalInfo />
+                        <Button onClick={() => {
+                            setShowTransactionModalSwap({ b: true, isPending: true, status: "" });
+                            MultihopSwap(amountIn, wallet, routes, "0", client).then((
+                                res
+                            ) => {
+                                setShowTransactionModalSwap({ b: ShowTransactionModalSwap.b, isPending: true, status: res[0] })
+                                setTx(res[1])
+                            })
+
+                        }}>Swap</Button>
+                    </Block>
+                </Container>
+            </ContentDiv>
         </>
 
-    const Error =
-        <>
-            <Block>
-                
-            </Block>
-        </>
+    let PendingTxComponent;
+    switch (ShowTransactionModalSwap.status) {
+        case "":
+            PendingTxComponent = LoadingModalComponent(
+                "swap",
+                theme
+            )
+            break;
+
+        case "Succeed":
+            PendingTxComponent = SucceedModalComponent(
+                "swap",
+                theme,
+                tx
+            )
+            break;
+
+        case "Failed":
+            PendingTxComponent = FailedModalComponent(
+                "swap",
+                theme
+            )
+            break;
+
+        case "Error":
+            PendingTxComponent = FailedModalComponent(
+                "swap",
+                theme
+            )
+            break;
+
+    }
 
     return (
-        <Container>
-            {Content}
-        </Container>
+        <>
+            <CloseDiv>
+                <HeaderBlock>
+                    <HeaderText TextColor={theme.TextColor}>Confirm swap</HeaderText>
+                </HeaderBlock>
+                <CloseButton TextColor={theme.TextColor}>
+                    <a style={{ cursor: "pointer" }} onClick={onCLose} aria-hidden>×</a>
+                </CloseButton>
+            </CloseDiv>
+            {ShowTransactionModalSwap.isPending ? PendingTxComponent : ContentModalNotPending}
+        </>
     )
 }

@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import ArrowGrey from '../../../../assets/svg/ArrowSwap.svg'
 import { useToggleTheme } from "../../../../hooks/useToggleTheme";
+import { useAmountIn, useAmountOut } from "../../../../hooks/useAmountInStore";
 
 
 const SwapField = styled.div <{SwapButton: string, BorderField: string}>`
@@ -34,13 +35,30 @@ const TokenIcon = styled.svg <{icon: string}>`
 
 
 export const SwapFieldButton = () => {
+    const [theme, setTheme] = useToggleTheme();
+    const [amountIn, setAmountIn] = useAmountIn()
+    const [amountOut, setAmountOut] = useAmountOut()
 
-    
-    const [theme, setTheme] = useToggleTheme()
+    const HandleChangeTokensButton = () => {
+        let old_amountIn = amountIn
+        setAmountIn({
+            amt: amountOut.amt,
+            base: amountOut.base,
+            denom: amountOut.denom,
+            logo: amountOut.logo
+        })
+
+        setAmountOut({
+            amt: old_amountIn.amt,
+            base: old_amountIn.base,
+            denom: old_amountIn.denom,
+            logo: old_amountIn.logo
+        })
+    }
 
     return(
         <SwapField BorderField={theme.BorderField} SwapButton={theme.SwapButton}>
-            <TokenIcon icon={ArrowGrey}/>
+            <TokenIcon icon={ArrowGrey} onClick={HandleChangeTokensButton}/>
         </SwapField>
     )
 }

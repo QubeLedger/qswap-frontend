@@ -3,9 +3,12 @@ import { SwapPageMAXButton } from "../../../Buttons/PageButtons/SwapPage/SwapPag
 import { SwapPageModalFrom } from "../../../Modal/PageModal/SwapPage/SwapPageModalFrom";
 import { SwapPageInput } from "./SwapPageInput";
 import { useToggleTheme } from "../../../../hooks/useToggleTheme";
-import { useAmountIn } from "../../../../hooks/useAmountInStore";
+import { useAmountIn, useAmountOut } from "../../../../hooks/useAmountInStore";
 import { useTokenBalanceStore, TokenBalance } from "../../../../hooks/useBalanceStore";
 import { toFixed } from "../../../../constants/utils";
+import { GetRouteByTokenAToTokenB } from "../../../../web3/routes";
+import { usePoolMetadata, useRoutes } from "../../../../hooks/usePoolMetadata";
+import { useEffect } from "react";
 
 const Field = styled.div <{BorderField: string, FieldBg: string}>`
     width: 100%;
@@ -56,7 +59,14 @@ export const SwapPageFieldFrom = () => {
         
     const [theme, setTheme] = useToggleTheme()
     const [amountIn, setAmountIn] = useAmountIn()
-    const [tokenBalances, setTokenBalanceStore] = useTokenBalanceStore()
+    const [amountOut, setAmountOut] = useAmountOut()
+    const [tokenBalances, setTokenBalanceStore] = useTokenBalanceStore();
+    const [routes, setRoutes] = useRoutes();
+    const [pools, setPools] = usePoolMetadata()
+
+    useEffect(() => {
+        setRoutes(GetRouteByTokenAToTokenB(pools, amountIn.denom, amountOut.denom))
+    }, [amountIn, amountOut, routes])
 
     let balance = tokenBalances.find((tokenBalance) => tokenBalance.Display == amountIn.base) as TokenBalance
 

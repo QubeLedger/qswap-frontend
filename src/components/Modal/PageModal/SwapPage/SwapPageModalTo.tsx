@@ -10,7 +10,7 @@ import { useShowModalSwapTo } from "../../../../hooks/useShowModal";
 import { TOKEN_INFO } from "../../../../constants";
 import { toFixed } from "../../../../constants/utils";
 import { useTokenBalanceStore } from "../../../../hooks/useBalanceStore";
-import { useAmountOut } from "../../../../hooks/useAmountInStore";
+import { useAmountIn, useAmountOut } from "../../../../hooks/useAmountInStore";
 
 
 const ModalDialogOverlay = animated(DialogOverlay);
@@ -241,6 +241,7 @@ export const SwapPageModalTo = () => {
 
     const [theme, setTheme] = useToggleTheme()
     const [ShowModalSwapTo, setShowModalSwapTo] = useShowModalSwapTo();
+    const [amountIn, setAmountIn] = useAmountIn()
     const [amountOut, setAmountOut] = useAmountOut()
     const [tokenBalances, setTokenBalanceStore] = useTokenBalanceStore()
 
@@ -248,7 +249,9 @@ export const SwapPageModalTo = () => {
     const open = () => { setShowModalSwapTo({ b: true }) };
     const close = () => { setShowModalSwapTo({ b: false }) };
 
-    let tokens = TOKEN_INFO.map((token) =>
+    let temp_TOKEN_INFO = TOKEN_INFO.filter(token => token.Base !== amountIn.base)
+
+    let tokens = temp_TOKEN_INFO.map((token) =>
         <HoverBlock ModalHoverColor={theme.ModalHoverColor}>
             <TokenContrainer onClick={() => {
                 setAmountOut({

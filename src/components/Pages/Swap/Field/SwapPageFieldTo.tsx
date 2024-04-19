@@ -5,6 +5,8 @@ import { CalculatePriceByTick, GetTickByTokenATokenB } from "../../../../web3/ti
 import { useAmountIn, useAmountOut } from "../../../../hooks/useAmountInStore";
 import { useEffect, useState } from "react";
 import { toFixed } from "../../../../constants/utils";
+import { GetOutAmountByRouteAndInput } from "../../../../web3/routes";
+import { useRoutes } from "../../../../hooks/usePoolMetadata";
 
 const Field = styled.div <{BorderField: string, ToField: string}>`
     width: 100%;
@@ -37,23 +39,23 @@ export const SwapPageFieldTo = () => {
     const [theme, setTheme] = useToggleTheme()
     const [amountIn, setAmountIn] = useAmountIn()
     const [amountOut, setAmountOut] = useAmountOut()
-    const [tick, setTick] = useState(0)
+    const [out, setOut] = useState(0);
+    const [routes, setRoutes] = useRoutes()
 
     useEffect(() => {
         async function main() {
-            let tick = await GetTickByTokenATokenB(amountIn.denom, amountOut.denom);
-
-            setTick(tick)
+            let temp_out = await GetOutAmountByRouteAndInput(routes, Number(amountIn.amt));
+            setOut(temp_out)
         }
         main()
     }, [amountIn, amountOut])
 
     let AmountOutComponent;
 
-    if (amountIn.amt == '' || amountIn.amt == '0' || isNaN(Number(amountIn.amt)) || Number(amountIn.amt) == 0) {
+    if (amountIn.amt == '' || amountIn.amt == '0' || isNaN(Number(amountIn.amt)) || Number(amountIn.amt) == 0 || out == 0) {
         AmountOutComponent = <AmountOutInactive>0</AmountOutInactive>
     } else {
-        AmountOutComponent = <AmountOutActive>{toFixed(Number(amountIn.amt) * CalculatePriceByTick(tick), 4)}</AmountOutActive>
+        AmountOutComponent = <AmountOutActive>{toFixed(out, 4)}</AmountOutActive>
     }
 
     return(

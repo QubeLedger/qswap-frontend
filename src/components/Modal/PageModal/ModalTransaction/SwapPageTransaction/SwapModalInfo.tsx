@@ -1,4 +1,7 @@
 import styled from "styled-components";
+import { QUBE_TESTNET_INFO } from "../../../../../constants";
+import { useRoutes } from "../../../../../hooks/usePoolMetadata";
+import { GetBaseByDenom } from "../../../../../constants/utils";
 
 const InfoBlock = styled.div`
     width: 100%;
@@ -32,15 +35,28 @@ const BlockInfo = styled.div`
 `
 
 export const SwapModalInfo = () => {
+    const [routes, setRoutes] = useRoutes();
+
+    let route_string = "No route"
+    for (let index = 0; index < routes.length; index++) {
+        if(route_string == "No route") {
+            route_string = ""
+            route_string += GetBaseByDenom(routes[index])
+        } else {
+            route_string += `-> ${GetBaseByDenom(routes[index])}`
+        }
+        
+    }
+
     return(
         <InfoBlock>
             <BlockInfo>
                 <InfoText>Route</InfoText>
-                <InfoText>0</InfoText>
+                <InfoText>{route_string}</InfoText>
             </BlockInfo>
             <BlockInfo>
                 <InfoText>Max transaction fee</InfoText>
-                <InfoText>0</InfoText>
+                <InfoText>{QUBE_TESTNET_INFO.feeCurrencies[0].gasPriceStep.high} {QUBE_TESTNET_INFO.feeCurrencies[0].coinDenom}</InfoText>
             </BlockInfo>
         </InfoBlock>
     )

@@ -3,12 +3,15 @@ import { MainIndex } from './components';
 import { ThemeBlackState, ThemeWhiteState, useToggleTheme } from './hooks/useToggleTheme';
 import { useWallet } from './hooks/useWallet';
 import { useConnectKeplrWalletStore } from './hooks/useConnectKeplrWalletStore';
+import { InitSigner } from './web3/stargate';
+import { useClient } from './hooks/useClient';
 
 function App() {
 
 	const [theme, setTheme] = useToggleTheme();
 	const [ connectWallet, setConnectWallet ] = useConnectKeplrWalletStore();
 	const [ wallet, setWallet ] = useWallet();
+	const [ client, setClient ] = useClient();
 
 	useEffect(() => {
 		if (localStorage.getItem('Theme') != "") {
@@ -32,7 +35,6 @@ function App() {
 				setConnectWallet({connected: true})
 			}
 			setWallet(wallet)
-
 		}
 	}, [])
 

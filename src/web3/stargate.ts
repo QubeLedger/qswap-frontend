@@ -2,10 +2,11 @@ import { SigningStargateClient } from "@cosmjs/stargate";
 import { QUBE_TESTNET_INFO } from "../constants";
 import { Registry } from "@cosmjs/proto-signing";
 import { defaultRegistryTypes, GasPrice } from "@cosmjs/stargate";
+import { MsgMultiHopSwap, typeUrlMsgMultiHopSwap } from "../constants/cosmos/proto/dex/tx";
 
 export async function InitSigner() {
         const reg = new Registry(defaultRegistryTypes)
-
+        reg.register(typeUrlMsgMultiHopSwap, MsgMultiHopSwap)
 
         var offlineSigner = (window as any).getOfflineSigner(QUBE_TESTNET_INFO.chainId);
         var accounts = await offlineSigner.getAccounts();

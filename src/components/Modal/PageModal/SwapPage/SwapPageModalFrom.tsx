@@ -5,7 +5,7 @@ import AtomLogo from '../../../../assets/svg/AtomLogo.png'
 import loop from '../../../../assets/svg/loop.svg'
 import { useToggleTheme } from "../../../../hooks/useToggleTheme";
 import { useShowModalSwapFrom } from "../../../../hooks/useShowModal";
-import { useAmountIn } from "../../../../hooks/useAmountInStore";
+import { useAmountIn, useAmountOut } from "../../../../hooks/useAmountInStore";
 import { TOKEN_INFO } from "../../../../constants";
 import { useTokenBalanceStore } from "../../../../hooks/useBalanceStore";
 import { toFixed } from "../../../../constants/utils";
@@ -242,12 +242,15 @@ export const SwapPageModalFrom = () => {
     const [theme, setTheme] = useToggleTheme()
     const [ShowModalSwapFrom, setShowModalSwapFrom] = useShowModalSwapFrom();
     const [amountIn, setAmountIn] = useAmountIn()
+    const [amountOut, setAmountOut] = useAmountOut()
     const [tokenBalances, setTokenBalanceStore] = useTokenBalanceStore()
 
     const open = () => { setShowModalSwapFrom({ b: true }) };
     const close = () => { setShowModalSwapFrom({ b: false }) };
 
-    let tokens = TOKEN_INFO.map((token) =>
+    let temp_TOKEN_INFO = TOKEN_INFO.filter(token => token.Base !== amountOut.base)
+
+    let tokens = temp_TOKEN_INFO.map((token) =>
         <HoverBlock ModalHoverColor={theme.ModalHoverColor}>
             <TokenContrainer onClick={() => {
                 setAmountIn({
@@ -301,7 +304,6 @@ export const SwapPageModalFrom = () => {
                         </SearchDiv>
                     </SearchBorder>
                     <TokenBlock >
-                        {tokens}
                         {tokens}
                     </TokenBlock>
                 </StyledDialogContent>

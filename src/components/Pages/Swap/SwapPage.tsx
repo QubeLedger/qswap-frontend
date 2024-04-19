@@ -10,7 +10,10 @@ import { useWallet } from "../../../hooks/useWallet";
 import { TokenBalance, useBalancesStore, useTokenBalanceStore } from "../../../hooks/useBalanceStore";
 import { GetInfoFromTokenInfo, GetPriceByDenom, UpdateBalances } from "../../../web3/balances";
 import { useAmountIn, useAmountOut } from "../../../hooks/useAmountInStore";
-import { useLastTimeUpdate } from "../../../hooks/useStoreUtils";
+import { usePoolMetadata } from "../../../hooks/usePoolMetadata";
+import { GetAllPool } from "../../../web3/routes";
+import { useClient } from "../../../hooks/useClient";
+import { InitSigner } from "../../../web3/stargate";
 
 const Container = styled.div`
     width: 400px;
@@ -33,6 +36,8 @@ export const SwapPage = () => {
     const [balances, setBalances] = useBalancesStore();
     const [amountIn, setAmountIn] = useAmountIn()
     const [amountOut, setAmountOut] = useAmountOut()
+    const [pools, setPools] = usePoolMetadata()
+    const [ client, setClient ] = useClient();
 
     useEffect(() => {
         async function update() {
@@ -65,9 +70,16 @@ export const SwapPage = () => {
         
             setTokenBalanceStore(temp_tokenBalances)
 
+            let temp_pools = await GetAllPool()
+            setPools(temp_pools)
+
+            let client = await InitSigner();
+			setClient(client)
+
 		}
 		update()
-    }, [balances, tokenBalances, wallet, amountIn, amountOut])
+    }, [balances, wallet])
+
     
     return(
         <Container>
