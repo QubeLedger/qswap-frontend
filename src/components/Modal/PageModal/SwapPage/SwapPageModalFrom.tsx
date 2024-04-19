@@ -118,6 +118,12 @@ const SearchToken = styled.input`
     font-family: 'Metropolis', sans-serif;
 `
 
+const OpenTokenLogo = styled.img`
+    width: 32px;
+    height: 32px;  
+    border-radius: 50px;
+`
+
 const TokenLogo = styled.img`
     width: 45px;
     height: 45px;  
@@ -272,7 +278,7 @@ export const SwapPageModalFrom = () => {
         <ModalBlock>
             <OpenButton OpenButtonBg={theme.OpenButtonBg} modalHover={theme.modalHover} TextColor={theme.TextColor} onClick={open}>
                 <div style={{ display: "flex", alignItems: "center" }}>
-                    <TokenLogo src={amountIn.logo} />
+                    <OpenTokenLogo src={amountIn.logo} />
                     <TokenName TextColor={theme.TextColor}>{amountIn.base}</TokenName>
                 </div>
             </OpenButton>
