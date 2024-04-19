@@ -46,7 +46,7 @@ export const SwapPage = () => {
                 
                 let temp_price = 0
                 if (token.Base != ""){
-                    let res = await GetPriceByDenom(token.Base)
+                    temp_price = await GetPriceByDenom(token.Base)
                 }
                 let temp_tokenBalance: TokenBalance = {
                     Display: token.Base,
