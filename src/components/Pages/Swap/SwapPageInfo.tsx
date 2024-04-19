@@ -36,7 +36,7 @@ export const SwapPageInfo = () => {
     return(
         <Cotainer>
             <Info>Price: 1 {amountIn.base} = {toFixed(CalculatePriceByTick(tick), 4)} {amountOut.base}</Info>
-            <Info>Route: {amountIn.base} {"->"} {amountOut.base}</Info>
+            {/*<Info>Route: {amountIn.base} {"->"} {amountOut.base}</Info>*/}
             <Info>Slippage: 0.2%</Info>
         </Cotainer>
     )
