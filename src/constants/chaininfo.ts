@@ -106,6 +106,24 @@ export const QUBE_TESTNET_INFO: ChainConnectInfo = {
                         coinDecimals: 6,
                         coinImageUrl: "https://altcoinsbox.com/wp-content/uploads/2023/01/usd-coin-usdc-logo.png",
                 },
+                {
+                        coinDenom: "USDT",
+                        coinMinimalDenom: "factory/qube1t2ydw7r4asmk74ymuvykjshdzun8dxye0az5wz/uusdt",
+                        coinDecimals: 6,
+                        coinImageUrl: "https://cryptologos.cc/logos/tether-usdt-logo.png?v=031",
+                },
+                {
+                        coinDenom: "SOL",
+                        coinMinimalDenom: "factory/qube1t2ydw7r4asmk74ymuvykjshdzun8dxye0az5wz/uusol",
+                        coinDecimals: 6,
+                        coinImageUrl: "https://upload.wikimedia.org/wikipedia/en/b/b9/Solana_logo.png",
+                },
+                {
+                        coinDenom: "ETH",
+                        coinMinimalDenom: "factory/qube1t2ydw7r4asmk74ymuvykjshdzun8dxye0az5wz/uweth",
+                        coinDecimals: 6,
+                        coinImageUrl: "https://cdn.worldvectorlogo.com/logos/ethereum-eth.svg",
+                },
         ],
         feeCurrencies: [
                 {
