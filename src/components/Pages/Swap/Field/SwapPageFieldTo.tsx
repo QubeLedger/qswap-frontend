@@ -27,8 +27,8 @@ const AmountOutInactive = styled.a `
     margin-left: 30px;
 `
 
-const AmountOutActive = styled.a `
-    color: #ffffff;
+const AmountOutActive = styled.a <{TextColor: string}>`
+    color: ${props => props.TextColor};
     font-size: 25px;
     font-weight: 700;
     margin-left: 30px;
@@ -55,7 +55,7 @@ export const SwapPageFieldTo = () => {
     if (amountIn.amt == '' || amountIn.amt == '0' || isNaN(Number(amountIn.amt)) || Number(amountIn.amt) == 0 || out == 0) {
         AmountOutComponent = <AmountOutInactive>0</AmountOutInactive>
     } else {
-        AmountOutComponent = <AmountOutActive>{toFixed(out, 4)}</AmountOutActive>
+        AmountOutComponent = <AmountOutActive TextColor={theme.TextColor}>{toFixed(out, 4)}</AmountOutActive>
     }
 
     return(
