@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import CircularProgress from '@mui/material/CircularProgress';
+import { AmountWithLogo } from '../../../hooks/useAmountInStore';
 
 
 const ContentDiv = styled.div`
@@ -51,8 +52,8 @@ const Description = styled.h3 `
 `
 
 
-export function LoadingModalComponent(
-    actiom: string, theme: any
+export function LoadingSwapModalComponent(
+    actiom: string, theme: any, amountIn: AmountWithLogo, amountOut: AmountWithLogo, out: number,
 ) {
     return <>
         <ContentDiv>
@@ -62,7 +63,7 @@ export function LoadingModalComponent(
                         <CircularProgress disableShrink size={80} />
                     </LoadingCircleBlock>
                     <ConfirmText TextColor={theme.TextColor}>Confirm transaction in your wallet</ConfirmText>
-                    <Amount TextColor={theme.TextColor}>Swap 1 QUBE to 1 ATOM</Amount>
+                    <Amount TextColor={theme.TextColor}>Swap {amountIn.amt} {amountIn.base} to {out} {amountOut.base}</Amount>
                 </Block>
             </Container>
         </ContentDiv>

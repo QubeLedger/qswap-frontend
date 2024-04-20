@@ -7,7 +7,7 @@ import { GetOutAmountByRouteAndInput } from "../../../../../web3/routes";
 import { useRoutes } from "../../../../../hooks/usePoolMetadata";
 import { toFixed } from "../../../../../constants/utils";
 import { useShowTransactionModalSwap } from "../../../../../hooks/useShowModal";
-import { LoadingModalComponent } from "../../../helpers/LoadingModalComponent";
+import { LoadingSwapModalComponent } from "../../../helpers/LoadingSwapModalComponent";
 import { SucceedModalComponent } from "../../../helpers/SucceedModalComponent";
 import { FailedModalComponent } from "../../../helpers/FailedModalComponent";
 import { Wallet } from "../../../../../hooks/useWallet";
@@ -221,9 +221,12 @@ export function SwapModal(
     let PendingTxComponent;
     switch (ShowTransactionModalSwap.status) {
         case "":
-            PendingTxComponent = LoadingModalComponent(
+            PendingTxComponent = LoadingSwapModalComponent(
                 "swap",
-                theme
+                theme,
+                amountIn,
+                amountOut,
+                out
             )
             break;
 

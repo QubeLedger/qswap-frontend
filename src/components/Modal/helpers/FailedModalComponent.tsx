@@ -61,6 +61,7 @@ const Description = styled.h3 <{TextColor: string}>`
 	font-size: 15px;
 	font-weight: 500;
 	color: ${props => props.TextColor};
+    text-align: center;
 `
 
 
@@ -78,7 +79,7 @@ export function FailedModalComponent(
                             It looks like you canceled the transaction or used insufficient gas to complete it.
 						</Description>
 					</div>
-					<Button>Try Again</Button>
+					{/*<Button>Try Again</Button>*/}
 				</Block>
 			</Container>
 		</ContentDiv>
