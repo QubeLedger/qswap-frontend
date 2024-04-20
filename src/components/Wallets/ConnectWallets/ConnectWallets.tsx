@@ -59,8 +59,9 @@ const WalletLogo = styled.img`
     height: 50px;
 `
 
-const WalletName = styled.h1`
+const WalletName = styled.a`
     margin-top: 5px;
+    font-weight: 600;
     font-size: 15px;
 `
 
@@ -90,9 +91,10 @@ const WalletBlock = styled.div <{walletBg: string}>`
     cursor: pointer;
 `
 
-const ConnectText = styled.h1 <{TextColor: string}>`
+const ConnectText = styled.a <{TextColor: string}>`
     font-size: 18px;
     margin-top: 20px;
+    font-weight: 600;
     color: ${props => props.TextColor};
 `
 
@@ -108,6 +110,7 @@ const WalletText = styled.h1 <{TextColor: string}>`
     font-size: 16px;
     color: ${props => props.TextColor};
     margin-top: 20px;
+    font-weight: 600;
     text-align: center;
 `
 
