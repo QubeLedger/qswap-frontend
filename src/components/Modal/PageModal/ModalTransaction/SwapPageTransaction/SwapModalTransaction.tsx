@@ -9,6 +9,8 @@ import { SwapModal } from './SwapModalContent';
 import { useAmountIn } from '../../../../../hooks/useAmountInStore';
 import { useBalancesStore } from '../../../../../hooks/useBalanceStore';
 import { TOKEN_INFO } from '../../../../../constants';
+import { useRoutes } from '../../../../../hooks/usePoolMetadata';
+
 const ModalDialogOverlay = animated(DialogOverlay);
 const StyledDialogOvelay = styled(ModalDialogOverlay)`
     &[data-reach-dialog-overlay] {
@@ -100,6 +102,7 @@ export const SwapModalTransaction = () => {
     const [walletModalStatus, setWalletModalStatus] = useShowWalletModal();
     const [amtIn, setAmountIn] = useAmountIn();
     const [balances, setBalances] = useBalancesStore();
+    const [routes, setRoutes] = useRoutes()
     let balance = balances.find((balance) => balance.denom == amtIn.denom)
 
     const ModalComponent = Modal(
@@ -123,6 +126,10 @@ export const SwapModalTransaction = () => {
     } else if (Number(balance?.amt) < (Number(amtIn.amt) * (10 ** Number(TOKEN_INFO.find((token) => token.Base == amtIn.base)?.Decimals)))) {
         Button = <OpenButtonBlock>
             <InactiveButton>Insufficient funds</InactiveButton>
+        </OpenButtonBlock>
+    } else if (routes.length == 0) {
+        Button = <OpenButtonBlock>
+            <InactiveButton>No route</InactiveButton>
         </OpenButtonBlock>
     } else {
         Button = <OpenButtonBlock>
