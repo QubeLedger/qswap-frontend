@@ -34,6 +34,7 @@ export function GetRouteByTokenAToTokenB(pools: Array<PoolMetadata>, tokenA: str
         let pair_tokenA_to_tokenB = pools.find((pool) => ((pool.pairID.token0 == tokenA) && (pool.pairID.token1 == tokenB) || (pool.pairID.token1 == tokenA) && (pool.pairID.token0 == tokenB)) )
         if(pair_tokenA_to_tokenB) {
                 route = [tokenA, tokenB]
+                return route
         } else {
                 let pairs_tokenA = pools.filter((pool) => (pool.pairID.token0 == tokenA) || (pool.pairID.token1 == tokenA))
                 pairs_tokenA.map((pair) => {
@@ -42,7 +43,18 @@ export function GetRouteByTokenAToTokenB(pools: Array<PoolMetadata>, tokenA: str
                         let pair_tokenA_to_tokenB = pairs_opposite_token.filter((pool) => pool.pairID.token0 == tokenB || pool.pairID.token1 == tokenB)
                         if (pair_tokenA_to_tokenB.length != 0) {
                                 route = [tokenA, opposite_token, tokenB]
+                                return route
                         }
+                        let pairs_token_opposite_token = pools.filter((pool) => (pool.pairID.token0 == opposite_token) || (pool.pairID.token1 == opposite_token))
+                        pairs_token_opposite_token.map((pair) => {
+                                let temp_opposite_token = pair.pairID.token0 == opposite_token ? pair.pairID.token1 : pair.pairID.token0
+                                let pairs_temp_opposite_token= pools.filter((pool) => (pool.pairID.token0 == temp_opposite_token) || (pool.pairID.token1 == temp_opposite_token))
+                                let pair_tokenA_to_tokenB = pairs_temp_opposite_token.filter((pool) => pool.pairID.token0 == tokenB || pool.pairID.token1 == tokenB)
+                                if (pair_tokenA_to_tokenB.length != 0) {
+                                        route = [tokenA, opposite_token, temp_opposite_token, tokenB]
+                                        return route
+                                }
+                        })
                 })
         }
 
