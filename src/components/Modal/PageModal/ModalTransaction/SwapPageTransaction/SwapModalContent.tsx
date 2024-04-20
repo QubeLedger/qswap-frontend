@@ -36,6 +36,7 @@ const TextBlock = styled.div`
 
 const Text = styled.a <{ TextColor: string }>`
     font-size: 11px;
+    font-weight: 500;
     color: ${props => props.TextColor};
 `
 
@@ -64,7 +65,7 @@ const TokenLogo = styled.img`
 `
 
 const TokenName = styled.a <{ TextColor: string }>`
-    font-size: 24px;
+    font-size: 22px;
     color: ${props => props.TextColor};
     font-weight: 500;
     margin-left: 10px;
@@ -96,10 +97,12 @@ const Button = styled.button`
     background: linear-gradient(to right, #74BCFD, #339BFE);
     border: none;
     border-radius: 20px;
-    margin-top: 30px;
+    margin-top: 20px;
     color: #fff;
-    font-size: 22px;
-    font-weight: 600;
+    font-size: 17px;
+    font-weight: 500;
+    margin-bottom: 20px;
+    cursor: pointer;
 `
 
 const CloseDiv = styled.div`
@@ -121,6 +124,7 @@ const ContentDiv = styled.div`
 
 const HeaderText = styled.a <{ TextColor: string }>`
     font-size: 14px;
+    font-weight: 500;
     color: ${props => props.TextColor};
     white-space: nowrap;
 `

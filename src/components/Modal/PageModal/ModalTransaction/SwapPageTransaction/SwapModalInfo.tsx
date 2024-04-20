@@ -2,10 +2,11 @@ import styled from "styled-components";
 import { QUBE_TESTNET_INFO } from "../../../../../constants";
 import { useRoutes } from "../../../../../hooks/usePoolMetadata";
 import { GetBaseByDenom } from "../../../../../constants/utils";
+import { useToggleTheme } from "../../../../../hooks/useToggleTheme";
 
 const InfoBlock = styled.div`
     width: 100%;
-    margin-top: 20px;
+    margin-top: 10px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -19,9 +20,17 @@ const LTVBlock = styled.div`
     color: #BABABA;
 `
 
-const InfoText = styled.h1`
-    font-size: 16px;
+const InfoNameText = styled.a`
+    font-size: 14px;
+    font-weight: 500;
     color: #BABABA;
+    margin: 0;
+`
+
+const InfoText = styled.a <{ TextColor: string }>`
+    font-size: 14px;
+    font-weight: 500;
+    color: ${props => props.TextColor};
     margin: 0;
 `
 
@@ -36,6 +45,7 @@ const BlockInfo = styled.div`
 
 export const SwapModalInfo = () => {
     const [routes, setRoutes] = useRoutes();
+    const [theme, setTheme] = useToggleTheme()
 
     let route_string = "No route"
     for (let index = 0; index < routes.length; index++) {
@@ -51,12 +61,12 @@ export const SwapModalInfo = () => {
     return(
         <InfoBlock>
             <BlockInfo>
-                <InfoText>Route</InfoText>
-                <InfoText>{route_string}</InfoText>
+                <InfoNameText>Route</InfoNameText>
+                <InfoText TextColor={theme.TextColor}>{route_string}</InfoText>
             </BlockInfo>
             <BlockInfo>
-                <InfoText>Max transaction fee</InfoText>
-                <InfoText>{QUBE_TESTNET_INFO.feeCurrencies[0].gasPriceStep.high} {QUBE_TESTNET_INFO.feeCurrencies[0].coinDenom}</InfoText>
+                <InfoNameText>Max transaction fee</InfoNameText>
+                <InfoText TextColor={theme.TextColor}>{QUBE_TESTNET_INFO.feeCurrencies[0].gasPriceStep.high} {QUBE_TESTNET_INFO.feeCurrencies[0].coinDenom}</InfoText>
             </BlockInfo>
         </InfoBlock>
     )
