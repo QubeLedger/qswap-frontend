@@ -15,6 +15,14 @@ export interface AmountWithLogo {
         denom: string;
 }
 
+interface Value {
+        value: string
+}
+
+const defaultValue: Value = {
+        value: ""
+}
+
 const defaultState: AmountIn = { 
         amt: "", 
         base: ""
@@ -37,3 +45,4 @@ const defaultAmountOutWithLogo: AmountWithLogo = {
 
 export const [useAmountIn] = createStore(defaultAmountInWithLogo);
 export const [useAmountOut] = createStore(defaultAmountOutWithLogo);
+export const [useValue] = createStore(defaultValue);

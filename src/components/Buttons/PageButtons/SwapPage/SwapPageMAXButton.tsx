@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { getBalanceByToken, toFixed } from "../../../../constants/utils";
 import { useBalancesStore } from "../../../../hooks/useBalanceStore";
-import { useAmountIn } from "../../../../hooks/useAmountInStore";
+import { useAmountIn, useValue } from "../../../../hooks/useAmountInStore";
 
 const Button = styled.div`
     width: 35px;
@@ -24,15 +24,13 @@ export const SwapPageMAXButton = () => {
 
     const [balances, setBalances ] = useBalancesStore();
     const [amountIn, setAmountIn] = useAmountIn()
+    const [value, setValue] = useValue();
 
     const HandleClickMaxButton = () => {
         let amount = isNaN(getBalanceByToken(balances, amountIn.denom))? 0 : getBalanceByToken(balances, amountIn.denom)
-        setAmountIn(
+        setValue(
             {
-                amt: toFixed(amount, 3),
-                base: amountIn.base,
-                logo: amountIn.logo,
-                denom: amountIn.denom,
+                value: toFixed(amount, 3),
             }
         );
     } 
