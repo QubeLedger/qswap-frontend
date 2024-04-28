@@ -43,6 +43,6 @@ export const SwapPageInput = () => {
     }, [value]);
 
     return(
-        <Input TextColor={theme.TextColor} placeholder="0" onChange={HandleInputAmpunt} value={value}></Input>
+        <Input TextColor={theme.TextColor} placeholder="0" onChange={HandleInputAmpunt} value={amtIn.amt}></Input>
     )
 }

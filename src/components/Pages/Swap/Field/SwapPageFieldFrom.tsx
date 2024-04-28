@@ -66,7 +66,7 @@ export const SwapPageFieldFrom = () => {
 
     useEffect(() => {
         setRoutes(GetRouteByTokenAToTokenB(pools, amountIn.denom, amountOut.denom))
-    }, [amountIn, amountOut, routes])
+    }, [amountIn, amountOut])
 
     let balance = tokenBalances.find((tokenBalance) => tokenBalance.Display == amountIn.base) as TokenBalance
 
