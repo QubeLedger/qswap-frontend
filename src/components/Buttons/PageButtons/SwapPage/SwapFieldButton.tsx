@@ -42,14 +42,14 @@ export const SwapFieldButton = () => {
     const HandleChangeTokensButton = () => {
         let old_amountIn = amountIn
         setAmountIn({
-            amt: amountOut.amt,
+            amt: old_amountIn.amt,
             base: amountOut.base,
             denom: amountOut.denom,
             logo: amountOut.logo
         })
 
         setAmountOut({
-            amt: old_amountIn.amt,
+            amt: "",
             base: old_amountIn.base,
             denom: old_amountIn.denom,
             logo: old_amountIn.logo

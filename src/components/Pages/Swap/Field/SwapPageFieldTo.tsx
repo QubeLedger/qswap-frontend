@@ -48,7 +48,7 @@ export const SwapPageFieldTo = () => {
             setOut(temp_out)
         }
         main()
-    }, [amountIn, amountOut])
+    }, [amountIn, amountOut, routes])
 
     let AmountOutComponent;
 
